@@ -12,3 +12,6 @@ coverage.*
 # ts
 **/*.tsbuildinfo
 **/dist
+
+# test
+**/test/fixtures-data

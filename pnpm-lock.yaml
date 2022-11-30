@@ -37,11 +37,14 @@ importers:
   packages/esbuild-node-builtin:
     specifiers:
       '@swc/core': ^1.3.19
+      '@types/debug': ^4.1.7
+      '@types/mocha': ^10.0.1
       '@types/node': ^18.11.9
       esbuild: '*'
       mocha: ^10.1.0
       napa: ^3.0.0
       nyc: ^15.1.0
+      p-defer: '3'
       prettier: ^2.7.1
       rollup: ^3.5.0
       rollup-plugin-polyfill-node: ^0.11.0
@@ -55,9 +58,12 @@ importers:
       rollup-plugin-polyfill-node: 0.11.0_rollup@3.5.0
     devDependencies:
       '@swc/core': 1.3.20
+      '@types/debug': 4.1.7
+      '@types/mocha': 10.0.1
       '@types/node': 18.11.9
       mocha: 10.1.0
       nyc: 15.1.0
+      p-defer: 3.0.0
       prettier: 2.8.0
       should: 13.2.3
       tsup: 6.5.0_utjah2wdhmg5maqoqvrhjvwbhq
@@ -540,6 +546,12 @@ packages:
       '@swc/core-win32-x64-msvc': 1.3.20
     dev: true
 
+  /@types/debug/4.1.7:
+    resolution: {integrity: sha512-9AonUzyTjXXhEOa0DnqpzZi6VHlqKMswga9EXjpXnnqxwLtdvPPtlO8evrI5D9S6asFRCQ6v+wpiUKbw+vKqyg==}
+    dependencies:
+      '@types/ms': 0.7.31
+    dev: true
+
   /@types/estree/1.0.0:
     resolution: {integrity: sha512-WulqXMDUTYAXCjZnk6JtIHPigp55cVtDgDrO2gHRwhyJto21+1zbVCtOYB2L1F9w4qCQ0rOGWBnBe0FNTiEJIQ==}
     dev: false
@@ -553,6 +565,14 @@ packages:
     dependencies:
       '@types/node': 18.11.9
     dev: false
+
+  /@types/mocha/10.0.1:
+    resolution: {integrity: sha512-/fvYntiO1GeICvqbQ3doGDIP97vWmvFt83GKguJ6prmQM2iXZfFcq6YE8KteFyRtX2/h5Hf91BYvPodJKFYv5Q==}
+    dev: true
+
+  /@types/ms/0.7.31:
+    resolution: {integrity: sha512-iiUgKzV9AuaEkZqkOLDIvlQiL6ltuZd9tGcW3gwpnX8JbuiuhFlEGmmFXEXkN50Cvq7Os88IY2v0dkDqXYWVgA==}
+    dev: true
 
   /@types/node/18.11.9:
     resolution: {integrity: sha512-CRpX21/kGdzjOpFsZSkcrXMGIBWMGNIHXXBVFSH+ggkftxg+XYP20TESbh+zFvFj3EQOl5byk0HTRn1IL6hbqg==}
@@ -2786,6 +2806,11 @@ packages:
     resolution: {integrity: sha512-RVbZPLso8+jFeq1MfNvgXtCRED2raz/dKpacfTNxsx6pLEpEomM7gah6VeHSYV3+vo0OAi4MkArtQcWWXuQoyw==}
     engines: {node: '>=4'}
     dev: false
+
+  /p-defer/3.0.0:
+    resolution: {integrity: sha512-ugZxsxmtTln604yeYd29EGrNhazN2lywetzpKhfmQjW/VJmhpDmWbiX+h0zL8V91R0UXkhb3KtPmyq9PZw3aYw==}
+    engines: {node: '>=8'}
+    dev: true
 
   /p-event/1.3.0:
     resolution: {integrity: sha512-hV1zbA7gwqPVFcapfeATaNjQ3J0NuzorHPyG8GPL9g/Y/TplWVBVoCKCXL6Ej2zscrCEv195QNWJXuBH6XZuzA==}

@@ -2,3 +2,7 @@ node_modules
 
 lib
 dist
+
+# test
+**/test/examples
+**/test/fixtures-data
