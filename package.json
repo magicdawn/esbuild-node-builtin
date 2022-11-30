@@ -30,13 +30,13 @@
   ],
   "author": "magicdawn",
   "license": "MIT",
-  "homepage": "https://github.com/magicdawn/build-tools/packages/esbuild-node-builtin",
+  "homepage": "https://github.com/magicdawn/esbuild-node-builtin",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/magicdawn/build-tools.git"
+    "url": "git+ssh://git@github.com/magicdawn/esbuild-node-builtin.git"
   },
   "bugs": {
-    "url": "https://github.com/magicdawn/build-tools/issues"
+    "url": "https://github.com/magicdawn/esbuild-node-builtin/issues"
   },
   "packageManager": "pnpm@7.17.0",
   "publishConfig": {
