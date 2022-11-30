@@ -1,18 +1,11 @@
 {
+  "extends": "../../tsconfig.base.json",
   "include": ["src/**/*"],
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "lib",
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "target": "ES2020",
-    "module": "CommonJS",
-    "strictNullChecks": true,
-    "skipLibCheck": true
-  },
-  "ts-node": {
-    "swc": true
+    "outDir": "dist",
+    "declaration": true,
+    "incremental": true,
+    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo"
   }
 }
