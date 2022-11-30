@@ -70,7 +70,7 @@
     "esbuild": "*"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,less,md}": [
+    "*.{js,jsx,ts,tsx,less,md,json}": [
       "prettier --write"
     ]
   }
