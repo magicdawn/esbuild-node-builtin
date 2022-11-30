@@ -15,6 +15,7 @@
     "test-cover": "nyc --reporter=lcov --reporter=text mocha",
     "dev": "tsc -w",
     "build": "rm -rf dist && tsc",
+    "prepublishOnly": "pnpm build",
     "---": "---",
     "dev:tsup": "tsup src/index.ts --dts --format esm,cjs --watch",
     "build:tsup": "tsup src/index.ts --dts --format esm,cjs"
