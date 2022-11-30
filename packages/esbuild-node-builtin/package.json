@@ -4,8 +4,12 @@
   "description": "esbuild plugin let u use node builtin modules",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist/index.js",
+    "dist/index.d.ts",
+    "inject"
+  ],
   "scripts": {
-    "prepare": "husky install",
     "test": "NODE_OPTIONS='--loader ts-node/esm' mocha",
     "test-cover": "nyc --reporter=lcov --reporter=text mocha",
     "dev": "tsc -w",
@@ -38,7 +42,6 @@
     "registry": "https://registry.npmjs.org"
   },
   "dependencies": {
-    "napa": "^3.0.0",
     "rollup": "^3.5.0",
     "rollup-plugin-polyfill-node": "^0.11.0"
   },
