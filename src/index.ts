@@ -14,12 +14,13 @@ const debug = debugFactory('esbuild-node-builtin:index')
 const POLYFILL_NODE_PREFIX = '\0polyfill-node.'
 const POLYFILL_NODE_FILTER = new RegExp(`^\\0polyfill-node\\.`)
 
-export type Options = {
+export type NodeBuiltinOptions = {
   exclude?: string[]
   injectBuffer?: boolean
   injectProcess?: boolean
 }
 
+/* istanbul ignore next */
 export default nodeBuiltin
 export { nodeBuiltin }
 
@@ -27,7 +28,7 @@ function nodeBuiltin({
   exclude,
   injectBuffer = false, // why, huge size AND can not tree-shaking
   injectProcess = true,
-}: Options = {}): Plugin {
+}: NodeBuiltinOptions = {}): Plugin {
   const PLUGIN_NAME = 'esbuild-node-builtin'
   debug(
     'options: excude = %o, injectBuffer = %s, injectProcess = %s',
@@ -47,57 +48,52 @@ function nodeBuiltin({
     name: PLUGIN_NAME,
     setup(build) {
       // builtin modules
-      {
-        // filter will use go regex
-        // https://github.com/evanw/esbuild/issues/1634
-        const filter = new RegExp(`^(node:)?(${Array.from(modules.keys()).join('|')})$`)
-        const extractId = new RegExp(`^(node:)?(?<id>(${Array.from(modules.keys()).join('|')}))$`)
-        debug('filter = %o', filter)
-        build.onResolve({ filter }, (args) => {
-          const match = extractId.exec(args.path)
-          const id = match?.groups?.id as string
-          debug('onResolve id = %s from %s', id, args.importer)
-          return { namespace: PLUGIN_NAME, path: id }
-        })
+      // filter will use go regex
+      // https://github.com/evanw/esbuild/issues/1634
+      const filter = new RegExp(`^(node:)?(${Array.from(modules.keys()).join('|')})$`)
+      const extractId = new RegExp(`^(node:)?(?<id>(${Array.from(modules.keys()).join('|')}))$`)
+      debug('filter = %o', filter)
+      build.onResolve({ filter }, (args) => {
+        const match = extractId.exec(args.path)
+        const id = match?.groups?.id as string
+        debug('onResolve id = %s from %s', id, args.importer)
+        return { namespace: PLUGIN_NAME, path: id }
+      })
 
-        build.onResolve({ filter: POLYFILL_NODE_FILTER }, (args) => {
-          const id = args.path.slice(POLYFILL_NODE_PREFIX.length)
-          debug('onResolve internal id = %s from %s', id, args.importer)
+      build.onResolve({ filter: POLYFILL_NODE_FILTER }, (args) => {
+        const id = args.path.slice(POLYFILL_NODE_PREFIX.length)
+        debug('onResolve POLYFILL_NODE id = %s from %s', id, args.importer)
+        return { namespace: PLUGIN_NAME, path: id }
+      })
 
-          return {
-            namespace: PLUGIN_NAME,
-            path: id,
-          }
-        })
+      build.onLoad({ namespace: PLUGIN_NAME, filter: /.*/ }, (args) => {
+        const id = args.path
+        debug('onLoad id = %s', id)
 
-        build.onLoad({ namespace: PLUGIN_NAME, filter: /.*/ }, (args) => {
-          const id = args.path
-          debug('onLoad id=%s', id)
+        if (modules.has(id)) {
+          return { contents: modules.get(id) }
+        }
 
-          if (modules.has(id)) {
-            return { contents: modules.get(id) }
-          }
+        // e.g __zlib-lib/binding
+        const key = id.endsWith('.js') ? id : id + '.js'
+        if (POLYFILLS[key]) {
+          let contents = POLYFILLS[key] as string
 
-          // e.g __zlib-lib/binding
-          const key = id.endsWith('.js') ? id : id + '.js'
-          if (POLYFILLS[key]) {
-            let contents = POLYFILLS[key] as string
-
-            // only this folder use `./xxx` relative import
-            // transform to special prefix
-            if (id.startsWith('__zlib-lib/')) {
-              // from './relative' => from '\0polyfill-node.__zlib-lib/relative'
-              contents = contents.replace(/from +['"]\.\/([\w_-]+?)['"]/g, (_, relativeName) => {
-                return `from '${POLYFILL_NODE_PREFIX}__zlib-lib/${relativeName || ''}'`
-              })
-            }
-
-            return { contents }
+          // only this folder use `./xxx` relative import
+          // transform to special prefix
+          if (id.startsWith('__zlib-lib/')) {
+            // from './relative' => from '\0polyfill-node.__zlib-lib/relative'
+            contents = contents.replace(/from +['"]\.\/([\w_-]+?)['"]/g, (_, relativeName) => {
+              return `from '${POLYFILL_NODE_PREFIX}__zlib-lib/${relativeName || ''}'`
+            })
           }
 
-          return { contents: EMPTY }
-        })
-      }
+          return { contents }
+        }
+
+        /* istanbul ignore next */
+        return { contents: EMPTY }
+      })
 
       build.initialOptions.inject = [
         ...(build.initialOptions.inject || []),

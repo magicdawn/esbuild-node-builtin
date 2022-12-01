@@ -1,12 +1,12 @@
 import constants from 'constants'
 import debugFactory from 'debug'
-import esbuild from 'esbuild'
+import esbuild, { Plugin } from 'esbuild'
 import { readFileSync } from 'fs'
 import os from 'os'
 import { join } from 'path'
 import 'should'
 import vm from 'vm'
-import { nodeBuiltin } from '../src'
+import nodeBuiltinDefaultExport, { nodeBuiltin, NodeBuiltinOptions } from '../src'
 
 const debug = debugFactory('esbuild-node-builtin:test')
 
@@ -27,7 +27,18 @@ const files = [
   'crypto.js',
 ]
 
-async function buildFile(file: string, { logError = true } = {}) {
+async function buildFile(
+  file: string,
+  {
+    logError = true,
+    extraOptions,
+    plugin,
+  }: {
+    logError?: boolean
+    extraOptions?: Partial<NodeBuiltinOptions>
+    plugin?: Plugin
+  } = {}
+) {
   const entry = join(__dirname, 'examples', file)
   const outfile = join(__dirname, 'fixtures-data', file)
 
@@ -37,7 +48,13 @@ async function buildFile(file: string, { logError = true } = {}) {
   debug('before build %s', file)
   await esbuild.build({
     entryPoints: [entry],
-    plugins: [nodeBuiltin({ injectBuffer: hasBuffer })],
+    plugins: [
+      plugin ??
+        nodeBuiltin({
+          injectBuffer: hasBuffer,
+          ...extraOptions,
+        }),
+    ],
     format: 'cjs',
     bundle: true,
     outfile,
@@ -97,5 +114,22 @@ describe('esbuild-node-builtin', function () {
     err?.message.should.match(/No matching export/i)
     err?.message.includes('esbuild-node-builtin:crypto').should.be.true()
     err?.message.includes('diffieHellman').should.be.true()
+  })
+
+  it('exclude works', async () => {
+    return buildFile('assert.js', {
+      logError: false,
+      extraOptions: {
+        exclude: ['assert'],
+      },
+    }).should.be.rejectedWith(/ERROR: Could not resolve "assert"/i)
+  })
+
+  it('empty options should works', async () => {
+    const code = await buildFile('assert.js', {
+      logError: false,
+      plugin: nodeBuiltinDefaultExport(),
+    })
+    await runCode(code)
   })
 })
