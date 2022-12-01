@@ -2,7 +2,7 @@
 
 > esbuild plugin let u use node builtin modules
 
-[![Build Status](https://img.shields.io/github/workflow/status/magicdawn/esbuild-node-builtin/ci/master.svg?style=flat-square)](https://github.com/magicdawn/esbuild-node-builtin/actions/workflows/ci.yml)
+[![Build Status](https://img.shields.io/github/workflow/status/magicdawn/esbuild-node-builtin/ci/main.svg?style=flat-square)](https://github.com/magicdawn/esbuild-node-builtin/actions/workflows/ci.yml)
 [![Coverage Status](https://img.shields.io/codecov/c/github/magicdawn/esbuild-node-builtin.svg?style=flat-square)](https://codecov.io/gh/magicdawn/esbuild-node-builtin)
 [![npm version](https://img.shields.io/npm/v/esbuild-node-builtin.svg?style=flat-square)](https://www.npmjs.com/package/esbuild-node-builtin)
 [![npm downloads](https://img.shields.io/npm/dm/esbuild-node-builtin.svg?style=flat-square)](https://www.npmjs.com/package/esbuild-node-builtin)
