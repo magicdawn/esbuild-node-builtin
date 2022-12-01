@@ -11,7 +11,7 @@
 ## Install
 
 ```sh
-$ pnpm add esbuild-node-builtin
+$ pnpm add -D esbuild-node-builtin
 ```
 
 ## Usage
