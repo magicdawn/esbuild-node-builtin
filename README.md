@@ -58,6 +58,11 @@ import { format } from 'util'
 - this package & rollup-plugin-polyfill-node, other exports from util will not be included.
 - esbuild-plugin-polyfill-node will include entire [util.js](https://unpkg.com/browse/util@0.12.5/util.js)
 
+## Why depends on rollup
+
+this package depends on rollup-plugin-polyfill-node, and use it's internal bundled polyfills.
+the rollup dep is useless, just prevent error report.
+
 ## Changelog
 
 [CHANGELOG.md](CHANGELOG.md)
