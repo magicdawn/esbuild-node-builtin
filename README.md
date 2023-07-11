@@ -2,7 +2,7 @@
 
 > esbuild plugin let u use node builtin modules
 
-[![Build Status](https://img.shields.io/github/workflow/status/magicdawn/esbuild-node-builtin/ci/main.svg?style=flat-square)](https://github.com/magicdawn/esbuild-node-builtin/actions/workflows/ci.yml)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/magicdawn/esbuild-node-builtin/ci.yml?branch=main&style=flat-square)](https://github.com/magicdawn/esbuild-node-builtin/actions/workflows/ci.yml)
 [![Coverage Status](https://img.shields.io/codecov/c/github/magicdawn/esbuild-node-builtin/main.svg?style=flat-square)](https://codecov.io/gh/magicdawn/esbuild-node-builtin)
 [![npm version](https://img.shields.io/npm/v/esbuild-node-builtin.svg?style=flat-square)](https://www.npmjs.com/package/esbuild-node-builtin)
 [![npm downloads](https://img.shields.io/npm/dm/esbuild-node-builtin.svg?style=flat-square)](https://www.npmjs.com/package/esbuild-node-builtin)
@@ -28,7 +28,7 @@ esbuild.build({
 ## Options
 
 - `injectProcess`: use esbuild inject for `process` global reference, default `true`
-- `injectBuffer`: use esbuild inject for `Buffer` global reference, default `false`, since this is big AND can not tree-shaking
+- `injectBuffer`: use esbuild inject for `Buffer` global reference, default `false`, since this is big AND can not perform tree-shaking
 - `exclude`: `string[]`, disable proxy some builtin module
 
 ## Why
@@ -46,8 +46,10 @@ AND
 
 ### esbuild-plugin-polyfill-node
 
-`esbuild-plugin-polyfill-node` a esbuild plugin, AND use browserify commonjs deps.
-AND not tree-shakable
+`esbuild-plugin-polyfill-node` is a esbuild plugin.
+
+- <del>AND use browserify commonjs deps.</del> AND not tree-shakable
+- UPDATE: 2023-07, it uses `@jspm/core`, same not well tree-shakable, e.g [path](https://github.com/jspm/jspm-core/blob/2.0.1/nodelibs/browser/path.js#L5-L19) these lines are side effects, and not tree-shakable
 
 e.g
 

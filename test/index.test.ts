@@ -4,9 +4,11 @@ import esbuild, { Plugin } from 'esbuild'
 import { readFileSync } from 'fs'
 import os from 'os'
 import { join } from 'path'
-import 'should'
+import { describe, expect, it, should } from 'vitest'
 import vm from 'vm'
-import nodeBuiltinDefaultExport, { nodeBuiltin, NodeBuiltinOptions } from '../src'
+import nodeBuiltinDefaultExport, { NodeBuiltinOptions, nodeBuiltin } from '../src'
+
+should()
 
 const debug = debugFactory('esbuild-node-builtin:test')
 
@@ -67,14 +69,14 @@ async function buildFile(
 
 async function runCode(code: string) {
   return new Promise<void>((resolve, reject) => {
-    const done = (err?: any) => {
+    const done = (err?: unknown) => {
       if (err) return reject(err)
       else resolve()
     }
 
     const script = new vm.Script(code)
     const context = vm.createContext({
-      done,
+      done, // it not part of `createContext`, it's called in example code
       setTimeout: setTimeout,
       clearTimeout: clearTimeout,
       console: console,
@@ -108,21 +110,26 @@ describe('esbuild-node-builtin', function () {
       err = e
     }
 
+    // expect(err).to.be.ok
+    // expect(err?.message).to.match(/No matching export/i)
+
     // err.message === `"diffieHellman" is not exported by "\u0000polyfill-node.crypto.js", imported by "test/examples/crypto-broken.js".`
     // ERROR: No matching export in "esbuild-node-builtin:crypto" for import "diffieHellman"
-    err?.should.be.ok()
+    err?.should.be.ok
     err?.message.should.match(/No matching export/i)
-    err?.message.includes('esbuild-node-builtin:crypto').should.be.true()
-    err?.message.includes('diffieHellman').should.be.true()
+    err?.message.includes('esbuild-node-builtin:crypto').should.be.true
+    err?.message.includes('diffieHellman').should.be.true
   })
 
   it('exclude works', async () => {
-    return buildFile('assert.js', {
-      logError: false,
-      extraOptions: {
-        exclude: ['assert'],
-      },
-    }).should.be.rejectedWith(/ERROR: Could not resolve "assert"/i)
+    return expect(
+      buildFile('assert.js', {
+        logError: false,
+        extraOptions: {
+          exclude: ['assert'],
+        },
+      })
+    ).rejects.toThrow(/ERROR: Could not resolve "assert"/i)
   })
 
   it('empty options should works', async () => {
