@@ -16,7 +16,7 @@
     "test-cover": "vitest run --coverage",
     "dev": "tsc -w",
     "build": "rm -rf dist && tsc",
-    "prepublishOnly": "pnpm build",
+    "prepublishOnly": "pnpm test && pnpm build",
     "---": "---",
     "dev:tsup": "tsup src/index.ts --dts --format esm,cjs --watch",
     "build:tsup": "tsup src/index.ts --dts --format esm,cjs"
