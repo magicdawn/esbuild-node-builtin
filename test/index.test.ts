@@ -11,23 +11,6 @@ import nodeBuiltinDefaultExport, { NodeBuiltinOptions, nodeBuiltin } from '../sr
 should()
 const debug = debugFactory('esbuild-node-builtin:test')
 
-const files = [
-  'events.js',
-  'crypto.js',
-  'url-parse.js',
-  'url-file-url-to-path.js',
-  'url-format.js',
-  'stream.js',
-  'assert.js',
-  'constants.js',
-  'os.js',
-  'path.js',
-  'string-decoder.js',
-  'zlib.js',
-  'domain.js',
-  'crypto.js',
-]
-
 async function buildFile(
   file: string,
   {
@@ -89,6 +72,22 @@ async function runCode(code: string) {
 }
 
 describe('examples code: bundle, run with vm module', () => {
+  const files = [
+    'events.js',
+    'crypto.js',
+    'url-parse.js',
+    'url-file-url-to-path.js',
+    'url-format.js',
+    'stream.js',
+    'assert.js',
+    'constants.js',
+    'os.js',
+    'path.js',
+    'string-decoder.js',
+    'zlib.js',
+    'domain.js',
+    'crypto.js',
+  ]
   files.forEach((file) => {
     it(`RUN success: examples/${file}`, async function () {
       const code = await buildFile(file)
@@ -136,5 +135,21 @@ describe('more cases', function () {
       plugin: nodeBuiltinDefaultExport(),
     })
     await runCode(code)
+  })
+})
+
+describe('inject', () => {
+  it('injectGlobal default on', async () => {
+    const code = await buildFile('inject/global.js')
+    await runCode(code)
+  })
+
+  it('injectGlobal manual off (expect error)', async () => {
+    const code = await buildFile('inject/global.js', {
+      extraOptions: {
+        injectGlobal: false,
+      },
+    })
+    await expect(runCode(code)).rejects.toThrow(/global is not defined/)
   })
 })

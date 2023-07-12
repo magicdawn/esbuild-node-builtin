@@ -1,0 +1,2 @@
+global.variable = 'value'
+done()

@@ -13,7 +13,7 @@ const debug = debugFactory('esbuild-node-builtin:index')
 const POLYFILL_NODE_PREFIX = '\0polyfill-node.'
 const POLYFILL_NODE_FILTER = new RegExp(`^\\0polyfill-node\\.`)
 
-/* istanbul ignore next */
+/* c8 ignore next */
 export default nodeBuiltin
 
 export const PLUGIN_NAME = 'esbuild-node-builtin'
@@ -93,7 +93,7 @@ export function nodeBuiltin({
           return { contents }
         }
 
-        /* istanbul ignore next */
+        /* c8 ignore next */
         return { contents: EMPTY }
       })
 
