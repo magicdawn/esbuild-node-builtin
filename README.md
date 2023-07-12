@@ -27,9 +27,18 @@ esbuild.build({
 
 ## Options
 
+- `injectGlobal`: use esbuild inject for `global` reference, default `true`
 - `injectProcess`: use esbuild inject for `process` global reference, default `true`
 - `injectBuffer`: use esbuild inject for `Buffer` global reference, default `false`, since this is big AND can not perform tree-shaking
 - `exclude`: `string[]`, disable proxy some builtin module
+
+### `inject*`
+
+see https://esbuild.github.io/api/#inject
+
+#### `injectGlobal`
+
+make `global.variable = 'value'` works in environment has no `global`, basicly translate to `globalThis.variable = 'value'`
 
 ## Why
 

@@ -1,11 +1,10 @@
+import debugFactory from 'debug'
 import { type Plugin } from 'esbuild'
 import path from 'path'
-import debugFactory from 'debug'
-
 import { getModules } from 'rollup-plugin-polyfill-node/dist/modules'
 import POLYFILLS from 'rollup-plugin-polyfill-node/dist/polyfills'
-const EMPTY = POLYFILLS['empty.js']
 
+const EMPTY = POLYFILLS['empty.js']
 const debug = debugFactory('esbuild-node-builtin:index')
 
 // e.g
@@ -14,27 +13,30 @@ const debug = debugFactory('esbuild-node-builtin:index')
 const POLYFILL_NODE_PREFIX = '\0polyfill-node.'
 const POLYFILL_NODE_FILTER = new RegExp(`^\\0polyfill-node\\.`)
 
-export type NodeBuiltinOptions = {
-  exclude?: string[]
-  injectBuffer?: boolean
-  injectProcess?: boolean
-}
-
 /* istanbul ignore next */
 export default nodeBuiltin
-export { nodeBuiltin }
 
-function nodeBuiltin({
+export const PLUGIN_NAME = 'esbuild-node-builtin'
+
+export type NodeBuiltinOptions = {
+  exclude?: string[]
+  injectGlobal?: boolean
+  injectProcess?: boolean
+  injectBuffer?: boolean
+}
+
+export function nodeBuiltin({
   exclude,
+  injectGlobal = true, // global.variable = 'value'
+  injectProcess = true, // `process.`
   injectBuffer = false, // why, huge size AND can not tree-shaking
-  injectProcess = true,
 }: NodeBuiltinOptions = {}): Plugin {
-  const PLUGIN_NAME = 'esbuild-node-builtin'
   debug(
-    'options: excude = %o, injectBuffer = %s, injectProcess = %s',
+    'options: excude = %o, injectGlobal = %s, injectProcess = %s, injectBuffer = %s',
     exclude,
-    injectBuffer,
-    injectProcess
+    injectGlobal,
+    injectProcess,
+    injectBuffer
   )
 
   const modules = getModules()
@@ -98,7 +100,7 @@ function nodeBuiltin({
       build.initialOptions.inject = [
         ...(build.initialOptions.inject || []),
         ...([
-          path.join(__dirname, '../inject/global.js'),
+          injectGlobal && path.join(__dirname, '../inject/global.js'),
           injectProcess && path.join(__dirname, '../inject/process.js'),
           injectBuffer && path.join(__dirname, '../inject/buffer.js'),
         ].filter(Boolean) as string[]),

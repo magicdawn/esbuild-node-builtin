@@ -14,9 +14,6 @@ importers:
       esbuild:
         specifier: '*'
         version: 0.18.11
-      rollup:
-        specifier: ^3.26.2
-        version: 3.26.2
       rollup-plugin-polyfill-node:
         specifier: ^0.12.0
         version: 0.12.0(rollup@3.26.2)
@@ -54,9 +51,6 @@ importers:
       lint-staged:
         specifier: ^13.2.3
         version: 13.2.3
-      p-defer:
-        specifier: '3'
-        version: 3.0.0
       prettier:
         specifier: ^3.0.0
         version: 3.0.0
