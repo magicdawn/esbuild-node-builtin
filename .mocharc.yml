@@ -1,9 +1,0 @@
-reporter: spec
-timeout: 5000
-recursive: false
-
-extension: [ts]
-
-require:
-  - ts-node/register
-  - should
